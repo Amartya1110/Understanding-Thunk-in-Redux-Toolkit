@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const nameOfSlice = "user"
 
-// Here 'fetchUserData' - is called as a // Here 'fetchUserData' - is called as a "Thunk Action Creator"
+// Here 'fetchUserData' - is called as a "Thunk Action Creator"
 export const fetchUserData = createAsyncThunk(
     `${nameOfSlice}/fetchUserData`, async(arg) => {
         try {
@@ -21,9 +21,9 @@ export const fetchUserData = createAsyncThunk(
 => NOTE:    
 1) The async function defined inside the "Thunk Action Creator" - 'fetchUserData'; is not a reducer function.
 2) Only fetchUserData.pending, fetchUserData.fulfilled and fetchUserData.rejected - these 3 are the reducer functions.
-3) Since the async function is not a reducer fumction, hence it'll not have access to the state of the slice.
+3) Since the async function is not a reducer function, hence it'll not have access to the state of the slice.
 4) The async function defined inside the "Thunk Action Creator" - is known as "payloadCreator".
-5) The first parameter of the "PayloadCreator" - is the argument that we pass to the "Thunk Action Creator" while dispatching it.
+5) The first parameter of the "PayloadCreator" - receives the valueof the argument that we pass to the "Thunk Action Creator" while dispatching it.
 E.g.: dispatch(fetchUserData("New User Name"))
       async(arg)
     =>Here, the value of 'arg' becomes equal to - "New User Name"
@@ -40,7 +40,7 @@ E.g.: dispatch(fetchUserData("New User Name"))
 
 
     NOTE: fetchUserData.pending, fetchUserData.fulfilled, fetchUserData.rejected - these are the reducer functions corresponding to the 
-          3 states of the promnise returned by the async middleware function
+          3 states of the promise returned by the async middleware function
           -> These Reducer function we need to define explicitly and inside the 'extraReducers'-property of the createSlice function
 
 */
@@ -62,7 +62,9 @@ const userSlice = createSlice({
         }
     },
     extraReducers: {
-        [fetchUserData.pending] : (state) => {
+        [fetchUserData.pending] : (state) => { // Here we are ignoring the "action" - argument 
+        // bcz while the promise returned is in pending state, we'll not get any data as a payload from the
+        // async middleware function - called as "payloadCreator"
             state.userName = "Loading ... "
         },
         [fetchUserData.fulfilled] (state, action) {
